@@ -1,0 +1,4 @@
+# Raw data mined from Claude Code transcripts: contains code and client data, never commit
+.data/
+__pycache__/
+.claude/worktrees/
