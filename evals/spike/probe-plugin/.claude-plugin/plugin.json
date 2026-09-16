@@ -1,0 +1,6 @@
+{
+  "name": "bulevo-probe",
+  "description": "Spike probe: proves a plugin loads, its skill fires and its hook runs inside eval runners",
+  "version": "0.0.1",
+  "author": { "name": "Lev" }
+}

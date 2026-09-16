@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "d=\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}\"; mkdir -p \"$d\" && date -u +%FT%TZ > \"$d/bulevo-probe-session-start\""
+          }
+        ]
+      }
+    ]
+  }
+}
