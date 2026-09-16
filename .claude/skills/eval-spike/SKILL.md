@@ -1,6 +1,6 @@
 ---
 name: eval-spike
-description: Hands-on spike that checks whether Harbor and claude plugin eval can measure this harness on this Linux server. Use when the user asks to run the eval spike.
+description: Hands-on spike that checks whether Harbor and claude plugin eval can measure this harness, run locally in WSL2 Ubuntu with Docker Desktop. Use when the user asks to run the eval spike.
 disable-model-invocation: true
 ---
 
@@ -10,16 +10,25 @@ Answer six open questions with real runs before building the eval system. Work s
 the first blocker, and write findings to `.data/spike/results.md` as you go (create it; `.data/` is
 gitignored). Report in Russian.
 
+## Where this runs
+
+The user's Windows workstation, inside WSL2 Ubuntu, with Docker Desktop providing Docker through WSL
+integration. The user starts Claude Code from an Ubuntu terminal in a clone of this repo that lives on
+the WSL filesystem (for example `~/projects/bulevo-harness`), not under `/mnt/<drive>/`: the Windows
+checkout has CRLF line endings that break shell scripts, and `/mnt` I/O is slow.
+
 ## Ground rules
 
-- **Shared server.** Other projects run here. Never use concurrency above 2 and stop if free memory
-  drops below 6 GB or free disk below 30 GB.
+- **Workstation in use.** The user keeps working on this PC. Use concurrency 1 for agent runs (2 only for
+  the model-free oracle run) and stop if the Docker VM's free memory drops below 4 GB or the disk holding
+  Docker's data has less than 30 GB free.
 - **Subscription only.** Use `CLAUDE_CODE_OAUTH_TOKEN` with `CLAUDE_FORCE_OAUTH=1`. Never set or use
   `ANTHROPIC_API_KEY` in this spike. The API budget is $5–10 a month and is reserved.
 - **Secrets.** Never print, echo, cat, log or write the token. Only test that it is set:
   `test -n "$CLAUDE_CODE_OAUTH_TOKEN" && echo set`. If it's missing, ask the user to run
   `claude setup-token` themselves and export it in their own shell or in `.data/spike/auth.env`
-  (mode 600), then source that file without displaying it.
+  (mode 600), then source that file without displaying it. Benchmark task images come from third-party
+  repositories and receive this token, so suggest the user revokes it after the spike.
 - **Pin versions.** Record `claude --version`, `harbor --version`, the git commit of this repo, model ids
   and the date for every run.
 - Verify facts against `harbor run --help` and https://docs.harborframework.com/llms.txt rather than
@@ -27,14 +36,24 @@ gitignored). Report in Russian.
 
 ## Step 0: preflight
 
-Record: `nproc`, `free -g`, `df -h .` and the Docker data root, `docker info` (server version, running
-containers count), `uv --version` or `pipx --version`, `claude --version`, `git rev-parse HEAD`.
-Stop and report if Docker isn't usable by this user or resources are below the limits above.
+Confirm the environment before anything else:
+
+- WSL2: `uname -r` contains `microsoft`, and the repo path is not under `/mnt/`. If it is, stop and ask
+  the user to clone into the WSL filesystem.
+- Line endings: `git ls-files --eol | grep -c 'w/crlf'` is 0.
+- Docker: `docker info` works from Ubuntu. If it fails, ask the user to start Docker Desktop and enable
+  WSL integration for this distro (Settings → Resources → WSL integration). Record server version, `NCPU`
+  and `MemTotal` from `docker info`, which are the Docker Desktop VM's limits rather than the PC's.
+- Disk: `docker system df` and `df -h` for the filesystem holding Docker's data.
+
+Also record `uv --version` or `pipx --version`, `claude --version`, `git rev-parse HEAD`.
+Stop and report if any check fails or resources are below the limits above.
 
 ## Step 1: install Harbor and smoke-test without a model
 
-Install with `uv tool install harbor` (or pipx). Run the oracle agent on one small task from the
-Terminal-Bench sample dataset with `-n 1`. Record wall time and whether reward was 1.
+Install with `uv tool install harbor` (or pipx) inside Ubuntu, never on Windows. Run the oracle agent on
+one small task from the Terminal-Bench sample dataset with `-n 1`. Record wall time and whether reward
+was 1.
 
 ## Step 2: does the plugin load inside Harbor? (question 1)
 
@@ -82,7 +101,9 @@ deliver such a question; run it only if it looks cheap (one short task).
 
 ## Step 6: claude plugin eval under the subscription (question 4)
 
-Needs Claude Code 2.1.269+. From `evals/spike/probe-plugin`:
+Needs Claude Code 2.1.269+ installed and logged in inside Ubuntu, plus `bubblewrap` and `socat` for the
+sandbox (`sudo apt install bubblewrap socat`; ask the user to run the install, it needs their password).
+From `evals/spike/probe-plugin`:
 
 ```bash
 claude plugin eval . --trust-plugin --model claude-sonnet-5 --runs 2 --no-publish --json .data-eval.json
@@ -96,4 +117,5 @@ Move the JSON into `.data/spike/`. Record with/without scores, delta, cost estim
 Write `.data/spike/results.md` with a table: question, answer, evidence, numbers. Then summarize for the
 user in Russian: what works, what doesn't, estimated cost per task per model, and a recommendation for
 the eval system (Harbor for which contour, plugin eval for which). Estimate how many task runs per week
-fit without hurting the user's normal Max usage, clearly marked as an estimate.
+fit without hurting the user's normal Max usage, clearly marked as an estimate. List the Docker images the
+spike pulled with their sizes, and offer the cleanup command (`docker image rm ...`) without running it.

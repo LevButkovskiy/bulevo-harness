@@ -263,24 +263,27 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--skip", action="append", default=[], help="substring of project dir name to skip")
     ap.add_argument("--min-prompts", type=int, default=1)
+    ap.add_argument("--min-tool-calls", type=int, default=1,
+                    help="skip noise sessions such as pings or runs that died on connection errors before any work")
     args = ap.parse_args()
 
     sys.stdout.reconfigure(encoding="utf-8")
     os.makedirs(os.path.join(args.out, "digests"), exist_ok=True)
-    count = 0
+    count = skipped = 0
     with open(os.path.join(args.out, "sessions.jsonl"), "w", encoding="utf-8") as out:
         for path in sorted(glob.glob(os.path.join(args.projects_dir, "*", "*.jsonl"))):
             project = os.path.basename(os.path.dirname(path))
             if any(s in project for s in args.skip):
                 continue
             meta, turns = extract_session(path, project)
-            if meta["human_prompts"] < args.min_prompts:
+            if meta["human_prompts"] < args.min_prompts or meta["tool_calls"] < args.min_tool_calls:
+                skipped += 1
                 continue
             out.write(json.dumps(meta, ensure_ascii=False) + "\n")
             with open(os.path.join(args.out, "digests", meta["session_id"] + ".md"), "w", encoding="utf-8") as fh:
                 fh.write(digest(meta, turns))
             count += 1
-    print(f"{count} sessions -> {args.out}")
+    print(f"{count} sessions -> {args.out} ({skipped} skipped as noise)")
 
 
 if __name__ == "__main__":
