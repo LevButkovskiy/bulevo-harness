@@ -17,7 +17,7 @@ Pick a Python 3 interpreter (`python3`, else `python`). Choose an output directo
 machine and today's date, for example `.data/<hostname>-<YYYY-MM-DD>`.
 
 ```bash
-python3 tools/transcripts/extract.py --out <out> --skip bulevo-harness $ARGUMENTS
+python3 plugins/bulevo/scripts/transcripts.py --out <out> --skip bulevo-harness $ARGUMENTS
 ```
 
 Report the session count per project from `<out>/sessions.jsonl` and ask the user whether to exclude any

@@ -11,13 +11,17 @@ must make agents do and why.
 - `.claude-plugin/marketplace.json` + `plugins/` — what gets installed into projects. Only this ships to users.
   `plugins/bulevo`: `/bulevo:task` turns a task into an agreed spec in `.claude/tasks/` before code, using
   the read-only `scout` subagent on Sonnet to map existing code. Settings: `.claude/bulevo.json` in the
-  project (`pushback`: `quiet` | `balanced` | `strict`).
+  project (`pushback`: `quiet` | `balanced` | `strict`). `/bulevo:retro` saves a plain-text retro of a
+  finished task to the plugin data folder (`~/.claude/plugins/data/bulevo-bulevo-harness/retros/`);
+  `/apply-retros` in this repo turns new retros into proposed fixes.
 - Plugin `version` is intentionally unset while iterating, so every pushed commit is an update.
-- `tools/transcripts/` — mine Claude Code session transcripts for agent failures: `extract.py` →
+- `plugins/bulevo/scripts/transcripts.py` — transcript extraction, shared by the plugin and the tools below:
+  bulk mode for a whole machine, focused mode (`--session`, `--mentions`) for one task.
+- `tools/transcripts/` — mine all transcripts on a machine for agent failures: `transcripts.py --out` →
   `batch.py` → parallel labeling agents per `LABELING.md` → `report.py`. Stdlib Python, Windows and Linux.
 - `evals/` — measurement. `evals/spike/` is a throwaway spike: a probe plugin and a Harbor agent subclass.
-- `.claude/skills/` — runbooks for maintaining this repo (`/label-sessions`, `/eval-spike`), not part of
-  any plugin.
+- `.claude/skills/` — runbooks for maintaining this repo (`/apply-retros`, `/label-sessions`, `/eval-spike`),
+  not part of any plugin.
 - `.data/` — mined transcripts, labels and run results. Gitignored because it holds source code and private
   data from the machine it ran on. Never commit it or paste its contents elsewhere.
 

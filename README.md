@@ -17,11 +17,23 @@ In a Claude Code session:
 /plugin install bulevo@bulevo-harness
 ```
 
-Choose the **User** scope to use it in every project. To update later:
+Choose the **User** scope to use it in every project.
 
+Third-party marketplaces don't auto-update by default, so new versions won't show up on their own. Turn on
+auto-update in `/plugin` → **Marketplaces** → `bulevo-harness`, or in `~/.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "bulevo-harness": {
+      "source": { "source": "github", "repo": "LevButkovskiy/bulevo-harness" },
+      "autoUpdate": true
+    }
+  }
+}
 ```
-/plugin marketplace update bulevo-harness
-```
+
+Claude Code then refreshes the marketplace after startup and updates the plugin in the background.
 
 ## Use
 
@@ -41,6 +53,13 @@ Run it at the start of a task, before any code is written. It:
 Implement from the approved spec in a fresh session, for example: `Implement .claude/tasks/<file>.md`.
 
 Works in a single repository and in a folder that contains several repositories.
+
+### `/bulevo:retro`
+
+Run it when a task is done. It reads the session's transcript, asks you five quick questions, and saves a
+plain-text retro — what went well, where you corrected the agent, and which harness change would have
+prevented it — to `~/.claude/plugins/data/bulevo-bulevo-harness/retros/`. Maintainers run `/apply-retros`
+in this repository on the same machine to turn retros into fixes.
 
 ### Settings
 
@@ -62,7 +81,7 @@ Optional `.claude/bulevo.json` in the project:
 |---|---|
 | `plugins/bulevo/` | The plugin |
 | `docs/requirements.md` | What the harness must make agents do, and why |
-| `tools/transcripts/` | Mine your own Claude Code transcripts for where agents needed correcting |
+| `tools/transcripts/` | Mine all Claude Code transcripts on a machine for where agents needed correcting |
 | `evals/` | Measuring harness changes; currently a spike with Harbor and `claude plugin eval` |
 
 Contributors working on the harness with Claude Code: see [CLAUDE.md](CLAUDE.md).

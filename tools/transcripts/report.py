@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Join extract.py metrics with agent labels and print aggregates as JSON.
+"""Join transcripts.py metrics with agent labels and print aggregates as JSON.
 
 Usage:
   python tools/transcripts/report.py --data .data/stage0 > .data/stage0/report.json

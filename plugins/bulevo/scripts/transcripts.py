@@ -3,13 +3,17 @@
 
 Stdlib only, so it runs unchanged on Windows and on a Linux dev server.
 
-Output (under --out):
+Bulk mode writes under --out:
   sessions.jsonl        one JSON object of hard metrics per session
   digests/<id>.md       human prompts plus a short trace of what the agent did between them
 
+Focused mode prints metrics and digests of selected sessions to stdout, for a retro of one task:
+  --session <id>                     a session by id (repeatable)
+  --mentions <text> --since-hours N  recent sessions whose transcript contains the text, such as a spec path
+
 Usage:
-  python tools/transcripts/extract.py --out .data/stage0
-  python tools/transcripts/extract.py --projects-dir ~/.claude/projects --skip bulevo-harness --out .data/stage0
+  python transcripts.py --out .data/stage0 --skip bulevo-harness
+  python transcripts.py --session 3dbdb0aa-... --mentions 2026-09-17-header-colors --since-hours 48
 """
 import argparse
 import collections
@@ -108,11 +112,13 @@ def extract_session(path, project):
             first_ts = first_ts or ts
             last_ts = ts
             now = parse_ts(ts)
+            # events aren't always in time order, so measure gaps against the latest timestamp seen
             if prev_ts and now:
                 gap = (now - prev_ts).total_seconds()
                 if 0 < gap <= IDLE_GAP_SECONDS:
                     active_ms += gap * 1000
-            prev_ts = now or prev_ts
+            if now and (prev_ts is None or now > prev_ts):
+                prev_ts = now
         cwd = cwd or d.get("cwd")
         branch = branch or d.get("gitBranch")
         version = d.get("version") or version
@@ -257,17 +263,50 @@ def digest(meta, turns):
     return "\n".join(lines)
 
 
+def print_focused(args):
+    cutoff = datetime.now().timestamp() - args.since_hours * 3600
+    paths = []
+    for path in glob.glob(os.path.join(args.projects_dir, "*", "*.jsonl")):
+        sid = os.path.splitext(os.path.basename(path))[0]
+        if sid in args.session:
+            paths.append(path)
+        elif args.mentions and os.path.getmtime(path) >= cutoff:
+            with open(path, encoding="utf-8", errors="ignore") as fh:
+                text = fh.read()
+            if any(m in text for m in args.mentions):
+                paths.append(path)
+    if not paths:
+        print("No matching sessions.")
+        return
+    for path in sorted(set(paths), key=os.path.getmtime):
+        meta, turns = extract_session(path, os.path.basename(os.path.dirname(path)))
+        keys = ("session_id", "start", "end", "wall_minutes", "active_minutes", "human_prompts", "interruptions",
+                "permission_rejections", "tool_errors", "compactions", "tool_calls", "subagent_calls",
+                "ask_user_question", "commits", "main_model", "tokens_main", "tokens_subagents")
+        print(json.dumps({k: meta[k] for k in keys}, ensure_ascii=False))
+        print(digest(meta, turns))
+        print()
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--projects-dir", default=os.path.expanduser("~/.claude/projects"))
-    ap.add_argument("--out", required=True)
+    ap.add_argument("--out", help="bulk mode: output directory")
     ap.add_argument("--skip", action="append", default=[], help="substring of project dir name to skip")
     ap.add_argument("--min-prompts", type=int, default=1)
     ap.add_argument("--min-tool-calls", type=int, default=1,
                     help="skip noise sessions such as pings or runs that died on connection errors before any work")
+    ap.add_argument("--session", action="append", default=[], help="focused mode: session id (repeatable)")
+    ap.add_argument("--mentions", action="append", default=[], help="focused mode: text a transcript must contain")
+    ap.add_argument("--since-hours", type=float, default=48, help="focused mode: age limit for --mentions")
     args = ap.parse_args()
 
     sys.stdout.reconfigure(encoding="utf-8")
+    if args.session or args.mentions:
+        print_focused(args)
+        return
+    if not args.out:
+        ap.error("pass --out for bulk mode, or --session/--mentions for focused mode")
     os.makedirs(os.path.join(args.out, "digests"), exist_ok=True)
     count = skipped = 0
     with open(os.path.join(args.out, "sessions.jsonl"), "w", encoding="utf-8") as out:

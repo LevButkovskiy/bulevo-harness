@@ -17,11 +17,23 @@ Harness для [Claude Code](https://code.claude.com): плагины, с кот
 /plugin install bulevo@bulevo-harness
 ```
 
-Выберите скоуп **User**, чтобы плагин работал во всех проектах. Обновление:
+Выберите скоуп **User**, чтобы плагин работал во всех проектах.
 
+У сторонних маркетплейсов автообновление по умолчанию выключено, поэтому новые версии сами не появятся.
+Включите его в `/plugin` → **Marketplaces** → `bulevo-harness` или в `~/.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "bulevo-harness": {
+      "source": { "source": "github", "repo": "LevButkovskiy/bulevo-harness" },
+      "autoUpdate": true
+    }
+  }
+}
 ```
-/plugin marketplace update bulevo-harness
-```
+
+Тогда Claude Code после запуска сам обновит маркетплейс и плагин в фоне.
 
 ## Использование
 
@@ -41,6 +53,13 @@ Harness для [Claude Code](https://code.claude.com): плагины, с кот
 Реализацию по утверждённой спеке запускайте в новой сессии, например: `Реализуй .claude/tasks/<файл>.md`.
 
 Работает и в отдельном репозитории, и в папке, где лежат несколько репозиториев.
+
+### `/bulevo:retro`
+
+Запускайте, когда задача закончена. Скилл читает транскрипт сессии, задаёт вам пять коротких вопросов и
+сохраняет ретро одним текстом — что получилось, где вы поправляли агента и какое изменение harness это
+предотвратило бы — в `~/.claude/plugins/data/bulevo-bulevo-harness/retros/`. Разработчики harness на той же
+машине запускают `/apply-retros` в этом репозитории и превращают ретро в правки.
 
 ### Настройки
 

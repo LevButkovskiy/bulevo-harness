@@ -1,6 +1,6 @@
 # Session labeling instructions
 
-You label Claude Code sessions from digests produced by `extract.py`. The goal is to find where the
+You label Claude Code sessions from digests produced by `plugins/bulevo/scripts/transcripts.py`. The goal is to find where the
 agent failed the user, what the work was, and which sessions can become repeatable benchmark tasks.
 Write every free-text field short and in the language the user writes in within the sessions.
 
