@@ -46,7 +46,7 @@ Give each this prompt, with the batch number and output directory filled in:
 >    same key order as the rules). Write incrementally so progress isn't lost.
 > 5. Do not read raw transcripts under ~/.claude and do not modify anything else.
 > When done, check every line parses as JSON and the line count equals the id count. Reply with only: count
-> labeled, and 2–3 notable patterns across the batch (in Russian, short).
+> labeled, and 2–3 notable patterns across the batch (short, in the language the user writes in).
 
 Wait for every batch. If one comes back short, send that agent a follow-up to finish the missing ids.
 
@@ -57,6 +57,6 @@ python3 tools/transcripts/report.py --data <out> > <out>/report.json
 ```
 
 Spot-check two labels against their digests yourself: one with corrections, one without. Then summarize
-for the user in Russian: outcomes, corrections per session, top correction categories with 2–3 examples
+for the user in their language: outcomes, corrections per session, top correction categories with 2–3 examples
 each, what would have prevented them, and the recurring patterns the batch agents reported. Quote the
 user's words only as short evidence, and never paste code from digests into the summary.

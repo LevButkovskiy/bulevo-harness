@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Answer six open questions with real runs before building the eval system. Work step by step, stop at
 the first blocker, and write findings to `.data/spike/results.md` as you go (create it; `.data/` is
-gitignored). Report in Russian.
+gitignored). Report in the language the user writes in.
 
 ## Where this runs
 
@@ -23,7 +23,8 @@ checkout has CRLF line endings that break shell scripts, and `/mnt` I/O is slow.
   the model-free oracle run) and stop if the Docker VM's free memory drops below 4 GB or the disk holding
   Docker's data has less than 30 GB free.
 - **Subscription only.** Use `CLAUDE_CODE_OAUTH_TOKEN` with `CLAUDE_FORCE_OAUTH=1`. Never set or use
-  `ANTHROPIC_API_KEY` in this spike. The API budget is $5–10 a month and is reserved.
+  `ANTHROPIC_API_KEY` in this spike: API usage is billed separately and is kept for runs a subscription
+  can't cover.
 - **Secrets.** Never print, echo, cat, log or write the token. Only test that it is set:
   `test -n "$CLAUDE_CODE_OAUTH_TOKEN" && echo set`. If it's missing, ask the user to run
   `claude setup-token` themselves and export it in their own shell or in `.data/spike/auth.env`
@@ -115,7 +116,7 @@ Move the JSON into `.data/spike/`. Record with/without scores, delta, cost estim
 ## Step 7: report
 
 Write `.data/spike/results.md` with a table: question, answer, evidence, numbers. Then summarize for the
-user in Russian: what works, what doesn't, estimated cost per task per model, and a recommendation for
+user in their language: what works, what doesn't, estimated cost per task per model, and a recommendation for
 the eval system (Harbor for which contour, plugin eval for which). Estimate how many task runs per week
-fit without hurting the user's normal Max usage, clearly marked as an estimate. List the Docker images the
+fit without hurting the user's normal subscription usage, clearly marked as an estimate. List the Docker images the
 spike pulled with their sizes, and offer the cleanup command (`docker image rm ...`) without running it.

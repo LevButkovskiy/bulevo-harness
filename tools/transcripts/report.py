@@ -23,7 +23,7 @@ def total_tokens(tokens, kinds=("in", "out", "cache_read", "cache_write")):
 
 
 def short_project(p):
-    # "F--Projects-personal-myfit" or "-home-wsdev-projects-crm-backend" -> "personal-myfit" / "crm-backend"
+    # "C--Projects-acme-shop" or "-home-dev-projects-api-gateway" -> "acme-shop" / "api-gateway"
     p = p.split("--claude-worktrees")[0]
     return re.sub(r"^.*?[Pp]rojects-", "", p) or p
 

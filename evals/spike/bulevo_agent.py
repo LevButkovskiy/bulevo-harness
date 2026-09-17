@@ -14,7 +14,9 @@ import shlex
 from harbor.agents.installed.claude_code import ClaudeCode
 from harbor.environments.base import BaseEnvironment
 
-REPO_TARBALL = "https://codeload.github.com/LevButkovskiy/bulevo-harness/tar.gz/{ref}"
+# Forks point BULEVO_REPO at their own "owner/name" on GitHub
+DEFAULT_REPO = "LevButkovskiy/bulevo-harness"
+REPO_TARBALL = "https://codeload.github.com/{repo}/tar.gz/{ref}"
 REMOTE_ROOT = "/opt/bulevo-harness"
 
 
@@ -29,10 +31,18 @@ class BulevoClaudeCode(ClaudeCode):
             raise RuntimeError("Set BULEVO_PLUGIN to the plugin path inside the repo, e.g. evals/spike/probe-plugin")
         return f"{REMOTE_ROOT}/{plugin}"
 
+    async def ensure_system_dependencies(self, environment: BaseEnvironment, dependencies: tuple[str, ...]) -> None:
+        # nodejs/npm only serve the Alpine npm install; elsewhere bootstrap.sh installs a native binary.
+        # On Ubuntu 24.04 they pull ~680 apt packages and blow Harbor's 360 s agent setup timeout.
+        if await self._get_system_package_manager(environment) != "apk":
+            dependencies = tuple(d for d in dependencies if d not in ("nodejs", "npm"))
+        await super().ensure_system_dependencies(environment, dependencies)
+
     async def install(self, environment: BaseEnvironment) -> None:
         await super().install(environment)
         ref = os.environ.get("BULEVO_REF", "main")
-        url = shlex.quote(REPO_TARBALL.format(ref=ref))
+        repo = os.environ.get("BULEVO_REPO", DEFAULT_REPO)
+        url = shlex.quote(REPO_TARBALL.format(repo=repo, ref=ref))
         # --strip-components drops the "bulevo-harness-<ref>/" top directory of the GitHub tarball
         fetch = (
             f"mkdir -p {REMOTE_ROOT} && "

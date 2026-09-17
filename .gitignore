@@ -1,6 +1,8 @@
 # Raw data mined from Claude Code transcripts: contains code and client data, never commit
 .data/
 __pycache__/
+# Personal maintainer context, loaded by Claude Code but never published
+CLAUDE.local.md
 .claude/worktrees/
 evals/**/results/
 .data-eval.json

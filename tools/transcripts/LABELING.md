@@ -2,7 +2,7 @@
 
 You label Claude Code sessions from digests produced by `extract.py`. The goal is to find where the
 agent failed the user, what the work was, and which sessions can become repeatable benchmark tasks.
-The user (Lev) writes in Russian; write every free-text field in Russian, short.
+Write every free-text field short and in the language the user writes in within the sessions.
 
 A digest shows each human prompt, the tools the agent used before the next prompt, flags
 (INTERRUPTED, REJECTED-TOOL, tool-errors), and the agent's last reply of that turn.
