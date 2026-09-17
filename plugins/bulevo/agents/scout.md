@@ -37,4 +37,6 @@ Use this structure, with `path:line` references, under 400 words:
 - **Local rules:** only the ones that matter here
 - **Unknowns:** what you could not determine from the code
 
-State only what you saw in files. Mark anything inferred as inferred.
+State only what you saw in files. Mark anything inferred as inferred. Never report that something doesn't
+exist: report what you searched for and didn't find ("no match for role, seller, manager"), because the
+code may use other names for the same thing.

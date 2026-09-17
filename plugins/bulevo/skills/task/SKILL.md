@@ -34,10 +34,22 @@ default is `balanced`.
 If the whole change fits in one sentence, touches one or two places and leaves no decision open, say so
 and ask whether to skip the spec and just do it.
 
+If the task's headline promises more than its listed items (for example "match the design" followed by two
+bullet points), ask whether to do only the listed items or everything the headline implies, and record the
+answer in Scope.
+
 ## 3. Map the code
 
 Delegate to the `bulevo:scout` subagent. Give it the task text and anything the user already said about
 where the change lives. Read its report, then open the key files it names yourself before relying on them.
+Treat "doesn't exist" in the report as "not found under those names" until you've checked.
+
+## 3a. Check the environment
+
+With read-only commands, note what will block implementation: how far the branch is behind the default
+branch, uncommitted changes, whether the app or test stand responds, whether dependencies look stale.
+Record it in the spec. The environment and git belong to the user: propose actions (merge, stash, start
+services, install dependencies) and wait for a decision; never do them on your own.
 
 ## 4. Analyze the requirements
 
@@ -50,6 +62,12 @@ Treat the requirements as a draft that may be wrong. Work through:
 - **Side effects:** other features, services, reports or integrations the change affects.
 - **A simpler or better approach**, reusing what the scout found first. Follow existing patterns by default;
   propose a fresh approach only as an explicit alternative with reasons.
+- **Work from a design** (Figma, mockup, screenshot): the task is about how it looks, not only what it does.
+  For every affected element compare the design with the current app: font size, weight, line height,
+  spacing, alignment, widths. Take design values from the design source and current values from computed
+  styles. Compare the design frame size with the real container size in the app; a mismatch is a decision
+  for the spec, not a risk. Derive sizes from the real container, including padding and icons inside
+  controls, instead of copying percentages.
 
 Facts before hypotheses: when a conclusion depends on how the system behaves, check the code or data. Label
 anything you could not verify as an assumption.
@@ -78,7 +96,14 @@ Who needs this and why, in two or three sentences.
 Each question asked and the answer, and each alternative accepted or rejected with the reason.
 
 ## Scope
-In scope / out of scope.
+In scope, and an explicit list of what stays untouched.
+
+## Environment
+Branch state, stand, dependencies, and the actions proposed to the user before implementation.
+
+## Design fidelity
+Only for work from a design: one row per element and property — design value, current value, decision.
+Include the design frame size against the real container size.
 
 ## Reuse
 Existing code this change builds on, with path:line.
@@ -90,7 +115,10 @@ Every place that changes, grouped by repository or layer, with path and what cha
 - [ ] Each one checkable by a command, a test, a query or a screenshot. No "works correctly".
 
 ## Verification
-The exact commands and manual checks that prove the criteria, including UI screens to open.
+The exact commands and manual checks that prove the criteria. Run each command before writing it here, or
+mark it (unverified). When a criterion needs another role, account or data state, say how to get it, or mark
+it as a manual check for the user. For UI: a screenshot next to the design at the same scale, checked by
+eye for alignment and baselines; DOM measurements alone don't count.
 
 ## Risks and assumptions
 What could go wrong, and what was assumed without verification.
