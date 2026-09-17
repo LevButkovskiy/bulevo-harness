@@ -3,9 +3,16 @@
 A harness for Claude Code: plugins, skills, subagents and hooks that make coding agents follow a team's
 standards, plus the tooling that measures whether each harness change actually helps.
 
+Before designing or changing a skill, subagent or hook, read `docs/requirements.md`: what the harness
+must make agents do and why.
+
 ## Layout
 
-- `plugins/` — what gets installed into projects (none yet). Only this ships to users.
+- `.claude-plugin/marketplace.json` + `plugins/` — what gets installed into projects. Only this ships to users.
+  `plugins/bulevo`: `/bulevo:task` turns a task into an agreed spec in `.claude/tasks/` before code, using
+  the read-only `scout` subagent on Sonnet to map existing code. Settings: `.claude/bulevo.json` in the
+  project (`pushback`: `quiet` | `balanced` | `strict`).
+- Plugin `version` is intentionally unset while iterating, so every pushed commit is an update.
 - `tools/transcripts/` — mine Claude Code session transcripts for agent failures: `extract.py` →
   `batch.py` → parallel labeling agents per `LABELING.md` → `report.py`. Stdlib Python, Windows and Linux.
 - `evals/` — measurement. `evals/spike/` is a throwaway spike: a probe plugin and a Harbor agent subclass.

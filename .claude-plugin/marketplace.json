@@ -1,0 +1,11 @@
+{
+  "name": "bulevo-harness",
+  "owner": { "name": "bulevo-harness" },
+  "plugins": [
+    {
+      "name": "bulevo",
+      "source": "./plugins/bulevo",
+      "description": "Development cycle skills: understand a task, challenge its requirements and agree on a spec before writing code"
+    }
+  ]
+}
