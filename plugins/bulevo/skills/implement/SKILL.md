@@ -57,10 +57,11 @@ Work through **Acceptance criteria** and **Verification** in the spec.
 - Create and save data the way real users do. For data created in the UI, go through the UI and confirm
   which request actually fired (network panel, gateway or server logs). Calling an endpoint with a similar
   name is not a check.
-- For UI, a UI task is not done without one screenshot of every screen you changed, taken at the final check
-  rather than after each edit, plus a mobile-width one when the layout changed. Compare it with the design
-  or the analog screen the spec names. If you can't open a changed screen (login, role, data), tell the user
-  as soon as you find out, not at the end, and propose a way.
+- For UI, before handing over, delegate to the `bulevo:ui-reviewer` subagent: give it every screen you
+  changed, how to reach each (login, role, data), the design or analog screen the spec names, and the
+  users' language. Fix its blocking findings within the spec, asking first where a fix needs a decision the
+  spec didn't make, then run it once more. Hand over its remaining findings with your report. If you can't
+  open a changed screen yourself, tell the user as soon as you find out, not at the end, and propose a way.
 - Show evidence for every criterion: command output, a screenshot, a query result. Mark what you couldn't
   verify and why, and say what the user has to check by hand.
 
