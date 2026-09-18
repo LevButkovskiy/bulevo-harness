@@ -17,10 +17,12 @@ English, unless the user writes in English.
 
 ## 1. Collect the facts
 
-Run the bundled script with `python3`, or `python` if `python3` isn't available:
+Run the bundled script with Python 3. On Windows use `py -3`, or `python` if the launcher is missing:
+`python3` there is often a Microsoft Store stub that exits without running anything. Elsewhere use
+`python3`.
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/scripts/transcripts.py" --session ${CLAUDE_SESSION_ID} --mentions <spec-file-name> --since-hours 72
+<python> "${CLAUDE_PLUGIN_ROOT}/scripts/transcripts.py" --session ${CLAUDE_SESSION_ID} --mentions <spec-file-name> --since-hours 72
 ```
 
 Pass `--mentions` with the spec's file name when the task has a spec in `.claude/tasks/` (from the arguments

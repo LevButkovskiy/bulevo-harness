@@ -28,6 +28,12 @@ default branch, uncommitted changes, whether the stand responds. Report problems
 The environment and git belong to the user: propose merges, stashes, restarts or installs and wait for a
 decision. Commit only when the user asks.
 
+**Commands with side effects.** Before a build, formatter, migration, install or generator, check what it
+touches beyond your change: running processes (a dev server watching the output folder), shared folders,
+files outside the task. Prefer checks without side effects, such as a type check without emitting files or
+formatting only the files you changed. After such a command, compare `git status` with the files you meant
+to change and undo anything else.
+
 ## 3. Build within the spec
 
 - Change what **Changes** lists, reusing what **Reuse** names. No refactors, renames or cleanups outside it.

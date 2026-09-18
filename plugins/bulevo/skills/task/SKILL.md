@@ -144,7 +144,10 @@ Every place that changes, grouped by repository or layer, with path and what cha
 
 ## Verification
 The exact commands and manual checks that prove the criteria. Run each command before writing it here, or
-mark it (unverified). When a criterion needs another role, account or data state, say how to get it, or mark
+mark it (unverified). Make sure each check can pass in the real environment: when data changes on its own
+(background jobs, live traffic), compare old and new behavior on the same snapshot rather than at different
+times; when a table is empty, an index or plan criterion needs data; when a dev server is running, a build
+that cleans its output folder breaks it. When a criterion needs another role, account or data state, say how to get it, or mark
 it as a manual check for the user. For UI: a screenshot next to the design at the same scale, checked by
 eye for alignment and baselines; DOM measurements alone don't count.
 
