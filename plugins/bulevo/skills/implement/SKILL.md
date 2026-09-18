@@ -30,7 +30,8 @@ decision. Commit only when the user asks.
 
 **Commands with side effects.** Before a build, formatter, migration, install or generator, check what it
 touches beyond your change: running processes (a dev server watching the output folder), shared folders,
-files outside the task. Prefer checks without side effects, such as a type check without emitting files or
+files outside the task. If the project's dev server already responds, use it instead of starting another.
+Prefer checks without side effects, such as a type check without emitting files or
 formatting only the files you changed. After such a command, compare `git status` with the files you meant
 to change and undo anything else.
 
@@ -43,7 +44,9 @@ to change and undo anything else.
   a form while fixing its width), open choices inside the scope (how data is deleted or kept, where values
   the business changes live, how time zones work, the visual concept before its details), requests that read
   two ways, and review findings whose fix adds a new entity (a table, a cache key, a module, a flag). A
-  mention in the spec is not consent. If the user rejects a change, remove only that change.
+  mention in the spec is not consent. If the user rejects a change, remove only that change. The exception
+  is an option that is clearly better: it follows a pattern the project already uses, adds no new text for
+  users, doesn't widen the task, and doesn't affect data, money or security. Take it and name the choice.
 - **Text in the UI is short.** Labels, hints and descriptions say only what the user needs to act.
 - When the spec turns out wrong or incomplete, say what and propose the spec change before coding around it.
 

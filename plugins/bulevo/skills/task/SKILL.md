@@ -39,8 +39,10 @@ code, do it now without asking: skip the scout, the environment check, the spec 
 that are easy to change later, such as the file name or where it goes, follow existing files and name your
 choice in the reply.
 
-If a code change fits in one sentence, touches one or two places and leaves no decision open, say so and
-ask whether to skip the spec and just do it.
+If a code change fits in one sentence, touches one or two places and leaves no decision open, skip the
+spec: say "doing it without a spec, stop me if you want one" and do it. At `strict` pushback, ask first
+instead. When you do the change here, build and verify by sections 2–4 of
+`${CLAUDE_PLUGIN_ROOT}/skills/implement/SKILL.md`: read that file first.
 
 If the task's headline promises more than its listed items (for example "match the design" followed by two
 bullet points), ask whether to do only the listed items or everything the headline implies, and record the
@@ -98,7 +100,10 @@ anything you could not verify as an assumption.
 
 ## 5. Ask and push back
 
-Ask only questions whose answers lead to different code. Never ask what the code already answers. Use the
+Ask only questions whose answers lead to different code. Never ask what the code already answers. Don't ask
+when one option is clearly better: it follows a pattern the project already uses, adds no new text for
+users, doesn't widen the task, and doesn't affect data, money or security. Choose it and name the choice so
+the user can object. Use the
 AskUserQuestion tool: at most 4 questions, 2–4 options each, recommended option first. If that tool isn't
 available, ask in plain text and stop.
 
