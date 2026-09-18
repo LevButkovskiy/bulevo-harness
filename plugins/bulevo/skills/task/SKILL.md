@@ -10,7 +10,10 @@ disable-model-invocation: true
 The task: $ARGUMENTS
 
 Your job in this skill is to understand the task and agree on what to build. **Write no application code
-here.** Speak in the language the user writes in.
+here.**
+
+**Language.** Every message, summary, question and the spec itself go in the language the user writes in,
+not English, unless the user writes in English.
 
 ## 1. Read the settings
 
@@ -47,7 +50,10 @@ answer in Scope.
 
 Before mapping the code, check with read-only commands what the analysis depends on: the current branch,
 how far it is behind the default branch, uncommitted changes, whether the app or test stand responds,
-whether dependencies look stale. If the branch diverges from the default branch or the tree is dirty, tell
+whether dependencies look stale, and whether you can open and check every screen or endpoint the task will
+change: login, the role it needs, test data, a working browser session. If you can't, that's a blocker:
+say so now and propose a way (a test login, seed data, a dev-only sign-in) before any implementation, so
+nothing gets built blind. If the branch diverges from the default branch or the tree is dirty, tell
 the user in your next message and ask whether to switch or update before the analysis, because analysis on
 the wrong branch has to be redone. Record the state in the spec. The environment and git belong to the
 user: propose actions (merge, stash, start services, install dependencies) and wait for a decision; never do
@@ -64,6 +70,9 @@ Treat "doesn't exist" in the report as "not found under those names" until you'v
 Treat the requirements as a draft that may be wrong. Work through:
 
 - **The problem behind the task.** Who needs this and why. Does the requested solution solve it?
+- **Product constraints.** Check the requirements against what the project memory, CLAUDE.md and product docs
+  say about positioning, audience, pricing and paid features, and quote what applies in **Decisions**. A
+  limit or default that contradicts the product's direction is a wrong requirement.
 - **Contradictions** with current behavior, existing code, data or other requirements.
 - **Edge cases:** roles and permissions, empty and error states, concurrent edits, existing data and
   migrations, mobile and small screens for UI.
@@ -74,6 +83,9 @@ Treat the requirements as a draft that may be wrong. Work through:
 - **Side effects:** other features, services, reports or integrations the change affects.
 - **A simpler or better approach**, reusing what the scout found first. Follow existing patterns by default;
   propose a fresh approach only as an explicit alternative with reasons.
+- **UI without a design.** New or changed screens follow the closest existing screen of the same kind, as the
+  scout describes it: container, header, button sizes and placement, how saving, creating and deleting
+  work. Record it in **Follows pattern**; any deviation is a decision to ask about.
 - **Work from a design** (Figma, mockup, screenshot): the task is about how it looks, not only what it does.
   For every affected element compare the design with the current app: font size, weight, line height,
   spacing, alignment, widths. Take design values from the design source and current values from computed
@@ -112,6 +124,10 @@ In scope, and an explicit list of what stays untouched.
 
 ## Environment
 Branch state, stand, dependencies, and the actions proposed to the user before implementation.
+
+## Follows pattern
+Only for UI without a design: the analog screen and its layout, button sizes and placement, save, create
+and delete flow that this change repeats.
 
 ## Design fidelity
 Only for work from a design: one row per element and property — design value, current value, decision.

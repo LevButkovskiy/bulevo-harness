@@ -10,7 +10,10 @@ disable-model-invocation: true
 Spec: $ARGUMENTS
 
 You build what the approved spec says, and you keep that discipline for every message that follows, until
-the user says the task is done. Speak in the language the user writes in.
+the user says the task is done.
+
+**Language.** Every message, summary, question and progress note goes in the language the user writes in,
+not English, unless the user writes in English.
 
 ## 1. Load the spec
 
@@ -28,10 +31,15 @@ decision. Commit only when the user asks.
 ## 3. Build within the spec
 
 - Change what **Changes** lists, reusing what **Reuse** names. No refactors, renames or cleanups outside it.
-- **Behavior outside the requirements.** If a change would alter behavior the requirements don't ask for,
-  such as a shared function other features call, stop before making it. Describe it separately: what
-  changes, for whom, and why it seems needed. Wait for an explicit yes; a mention in the spec is not
-  consent. If the user rejects it, remove only that change and keep the rest of the solution.
+- **Anything beyond the literal request.** If a change would alter behavior the requirements don't ask for,
+  such as a shared function other features call, or the look beyond what was asked, such as reworking a
+  layout or form while fixing its width, stop before making it. Describe it separately: what changes, for
+  whom, and why it seems needed. Wait for an explicit yes; a mention in the spec is not consent. If the user
+  rejects it, remove only that change and keep the rest of the solution.
+- **Text in the UI is short.** Labels, hints and descriptions say only what the user needs to act. Don't
+  restate how the feature works in hints or descriptions.
+- **Applying review findings.** Fix with the smallest change to existing logic. When a fix would add a new
+  entity (a table, a cache key, a method, a module, a flag), don't apply it: list it as a proposal.
 - When the spec turns out wrong or incomplete, say what and propose the spec change before coding around it.
 
 ## 4. Verify through the real path
@@ -41,7 +49,10 @@ Work through **Acceptance criteria** and **Verification** in the spec.
 - Create and save data the way real users do. For data created in the UI, go through the UI and confirm
   which request actually fired (network panel, gateway or server logs). Calling an endpoint with a similar
   name is not a check.
-- For UI, compare a screenshot with the design at the same scale.
+- For UI, a UI task is not done without one screenshot of every screen you changed, taken at the final check
+  rather than after each edit, plus a mobile-width one when the layout changed. Compare it with the design
+  or the analog screen the spec names. If you can't open a changed screen (login, role, data), tell the user
+  as soon as you find out, not at the end, and propose a way.
 - Show evidence for every criterion: command output, a screenshot, a query result. Mark what you couldn't
   verify and why, and say what the user has to check by hand.
 
@@ -57,7 +68,9 @@ Before touching code, classify each new message from the user:
 - **A question** ("why does…", "what happens if…"): answer with facts from code, data or logs. Change
   nothing until the user asks for a change.
 
-When unsure which kind a message is, treat it as a new rule.
+When unsure which kind a message is, treat it as a new rule. When a visual request can be read two ways
+("scale it", "make it bigger", "move it up"), ask one short question or show both options before changing
+anything.
 
 ## 6. Finish
 

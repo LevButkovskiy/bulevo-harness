@@ -9,8 +9,11 @@ disable-model-invocation: true
 
 Extra input: $ARGUMENTS
 
-Look back at the task just finished and record what the harness should learn from it. Speak in the
-language the user writes in. Change no project files.
+Look back at the task just finished and record what the harness should learn from it. Change no project
+files.
+
+**Language.** Every message, question and the retro itself go in the language the user writes in, not
+English, unless the user writes in English.
 
 ## 1. Collect the facts
 

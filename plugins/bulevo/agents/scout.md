@@ -25,6 +25,10 @@ decides. Your output replaces the caller reading dozens of files, so be precise 
      The obvious endpoint by name is often not the one the UI uses.
    - **Variants of the same feature.** When the change targets one variant (a widget, a mode, a second form
      of the same thing), compare it with the other variants and list what differs.
+   - **Analog screen.** For UI work, the closest existing screen of the same kind (another editor, list or
+     settings page) and its skeleton: page container and width, header, button sizes and where they sit,
+     how saving works (one button or several, where), how creating and deleting work, which shared
+     layout or form components it uses.
    - **Access control.** When the task involves who can see or do something, how the project checks access
      today: roles, privileges attached to roles, flags, guards. Name the check and where it lives.
 4. **How the project verifies work.** Scripts in package.json or equivalents: test, typecheck, lint, dev
@@ -44,6 +48,7 @@ Use this structure, with `path:line` references, under 400 words:
 - **Write paths and variants:** every create/save path with the flags the frontend passes; differences
   between variants of the feature
 - **Access:** the existing check mechanism, if the task involves access
+- **Analog screen:** for UI work, the screen to follow and its skeleton
 - **Verification:** the commands, and what's missing
 - **Local rules:** only the ones that matter here
 - **Unknowns:** what you could not determine from the code
