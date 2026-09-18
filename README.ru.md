@@ -86,6 +86,7 @@ Harness для [Claude Code](https://code.claude.com): плагины, с кот
 |---|---|
 | `plugins/bulevo/` | Плагин |
 | `docs/requirements.md` | Что harness должен требовать от агентов и почему |
+| `tools/retros/` | Сбор цифр из ваших ретро в страницу прогресса |
 | `tools/transcripts/` | Разбор ваших транскриптов Claude Code: где агента приходилось поправлять |
 | `evals/` | Замер изменений harness; сейчас это спайк с Harbor и `claude plugin eval` |
 

@@ -21,8 +21,10 @@ must make agents do and why.
   bulk mode for a whole machine, focused mode (`--session`, `--mentions`) for one task.
 - `tools/transcripts/` — mine all transcripts on a machine for agent failures: `transcripts.py --out` →
   `batch.py` → parallel labeling agents per `LABELING.md` → `report.py`. Stdlib Python, Windows and Linux.
+- `tools/retros/` — `progress.py` collects the metrics frontmatter of retros into JSON and renders
+  `progress_page.html`; `/progress` rebuilds and republishes the page.
 - `evals/` — measurement. `evals/spike/` is a throwaway spike: a probe plugin and a Harbor agent subclass.
-- `.claude/skills/` — runbooks for maintaining this repo (`/apply-retros`, `/label-sessions`, `/eval-spike`),
+- `.claude/skills/` — runbooks for maintaining this repo (`/apply-retros`, `/progress`, `/label-sessions`, `/eval-spike`),
   not part of any plugin.
 - `.data/` — mined transcripts, labels and run results. Gitignored because it holds source code and private
   data from the machine it ran on. Never commit it or paste its contents elsewhere.

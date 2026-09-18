@@ -1,0 +1,160 @@
+<title>Прогресс harness</title>
+<style>
+:root{
+  --ground:#F2F4F5; --surface:#FFFFFF; --sunk:#E8ECEF; --ink:#152028; --muted:#57636D; --faint:#8A95A0; --line:#D5DCE2;
+  --spec:#3B6FD4; --impl:#C8552D; --ok:#2F7D52; --accent:#1F5F8B;
+  --via-implement:#2F7D52; --via-task:#3B6FD4; --via-other:#A06A12; --via-none:#8A95A0;
+  --body:"Segoe UI",system-ui,-apple-system,sans-serif; --mono:"Cascadia Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0F1418; --surface:#161D23; --sunk:#1D262E; --ink:#E3E9EE; --muted:#9BA8B4; --faint:#6D7A86; --line:#28333D;
+  --spec:#7DA2EC; --impl:#EB8A63; --ok:#62BD8A; --accent:#6FB0DD;
+  --via-implement:#62BD8A; --via-task:#7DA2EC; --via-other:#DDA84A; --via-none:#6D7A86;}}
+:root[data-theme="dark"]{
+  --ground:#0F1418; --surface:#161D23; --sunk:#1D262E; --ink:#E3E9EE; --muted:#9BA8B4; --faint:#6D7A86; --line:#28333D;
+  --spec:#7DA2EC; --impl:#EB8A63; --ok:#62BD8A; --accent:#6FB0DD;
+  --via-implement:#62BD8A; --via-task:#7DA2EC; --via-other:#DDA84A; --via-none:#6D7A86;}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;margin:0;padding-inline:16px;padding-block:28px 56px}
+.wrap{max-width:1000px;margin:0 auto}
+h1{font-size:clamp(28px,4.5vw,40px);margin:0 0 6px;font-weight:650}
+h2{font-size:21px;margin:0 0 12px;font-weight:620}
+p{margin:0 0 10px}
+.muted{color:var(--muted)} .note{font-size:13px;color:var(--faint);margin-top:10px}
+section{padding-block:26px;border-top:1px solid var(--line)}
+.kpis{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:18px}
+@media (min-width:760px){.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.kpi{border-top:2px solid var(--line);padding-top:8px}
+.kpi b{display:block;font-size:30px;font-weight:680;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi span{font-size:13px;color:var(--muted)}
+.chart{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px}
+.chart svg{display:block}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--muted);margin-top:10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px;background:var(--surface);border:1px solid var(--line)}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);font-weight:500;background:var(--sunk)}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;padding:0 7px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.bars{display:grid;gap:6px;max-width:640px}
+.bar{display:grid;grid-template-columns:170px 1fr 34px;gap:10px;align-items:center;font-size:13.5px}
+.bar .t{height:12px;background:var(--sunk);border-radius:3px;overflow:hidden}
+.bar .f{height:100%;background:var(--impl);border-radius:3px}
+.bar .v{font-family:var(--mono);font-size:12px;text-align:right;color:var(--muted)}
+</style>
+
+<div class="wrap">
+  <h1>Прогресс harness</h1>
+  <p class="muted" id="subtitle"></p>
+  <div class="kpis" id="kpis"></div>
+
+  <section>
+    <h2>Правки по задачам</h2>
+    <div class="chart" id="corr"></div>
+    <div class="legend"><span><i style="background:var(--spec)"></i>до утверждения спеки</span><span><i style="background:var(--impl)"></i>после</span><span id="baseline-legend"></span><span>под столбцом — как шла реализация: <b style="color:var(--via-implement)">I</b> implement, <b style="color:var(--via-task)">T</b> внутри task, <b style="color:var(--via-other)">O</b> другим способом</span></div>
+  </section>
+
+  <section>
+    <h2>Время и токены</h2>
+    <div class="chart" id="cost"></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>активные минуты</span><span><i style="background:var(--faint)"></i>чтение кэша, млн токенов</span></div>
+  </section>
+
+  <section>
+    <h2>Причины правок</h2>
+    <div class="bars" id="causes"></div>
+  </section>
+
+  <section>
+    <h2>Все задачи</h2>
+    <div class="tbl"><table id="table"></table></div>
+    <p class="note">Данные — из ретро (/bulevo:retro), без текста задач. Правки считает агент по ретро и твоим ответам.</p>
+  </section>
+</div>
+
+<script>
+const TASKS = /*TASKS*/[];
+const BASELINE = /*BASELINE*/null;
+const VIA = {implement:["I","var(--via-implement)"], task:["T","var(--via-task)"], other:["O","var(--via-other)"], none:["–","var(--via-none)"]};
+const CAUSE = {misunderstood:"Не понял задачу", wrong_approach:"Не тот подход", overengineering:"Переусложнил", incomplete:"Не до конца", didnt_verify:"Не проверил", ui_quality:"Качество интерфейса", standards:"Стандарты и стиль", ignored_instruction:"Проигнорировал указание", environment:"Среда", needless_question:"Лишний вопрос"};
+const n = v => (typeof v === "number" && isFinite(v)) ? v : 0;
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const total = t => n(t.corrections_spec) + n(t.corrections_impl);
+const label = t => `${(t.started || t.date || "").slice(5, 10)} ${t.project || ""}`;
+
+function kpis() {
+  const k = TASKS.length, last = TASKS.slice(-5), avg = a => a.length ? a.reduce((s, t) => s + total(t), 0) / a.length : 0;
+  const clean = TASKS.filter(t => total(t) === 0).length;
+  const viaImpl = TASKS.filter(t => t.implemented_via === "implement");
+  document.getElementById("subtitle").textContent = k ? `${k} задач с ${(TASKS[0].started || TASKS[0].date || "").slice(0, 10)}` : "Ретро с цифрами пока нет";
+  const items = [
+    [avg(last).toFixed(1), `правок на задачу, последние ${last.length}` + (BASELINE != null ? ` (до harness ${BASELINE})` : "")],
+    [avg(TASKS).toFixed(1), "правок на задачу, все"],
+    [`${clean}/${k}`, "задач без единой правки"],
+    [viaImpl.length ? avg(viaImpl).toFixed(1) : "—", `правок на задачу через implement, задач: ${viaImpl.length}`],
+  ];
+  document.getElementById("kpis").innerHTML = items.map(([b, s]) => `<div class="kpi"><b>${b}</b><span>${esc(s)}</span></div>`).join("");
+}
+
+function corrChart() {
+  const W = Math.max(640, TASKS.length * 64 + 60), H = 240, top = 16, bottom = 58, left = 36;
+  const max = Math.max(4, ...TASKS.map(total), BASELINE || 0), h = H - top - bottom, step = (W - left - 10) / Math.max(1, TASKS.length);
+  const y = v => top + h - v / max * h;
+  let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Правки по задачам">`;
+  for (let g = 0; g <= max; g += Math.ceil(max / 4)) s += `<line x1="${left}" x2="${W - 10}" y1="${y(g)}" y2="${y(g)}" stroke="var(--line)"/><text x="${left - 6}" y="${y(g) + 4}" text-anchor="end" font-size="11" fill="var(--faint)">${g}</text>`;
+  TASKS.forEach((t, i) => {
+    const x = left + i * step + step * 0.2, w = step * 0.6, a = n(t.corrections_spec), b = n(t.corrections_impl);
+    s += `<rect x="${x}" y="${y(a)}" width="${w}" height="${y(0) - y(a)}" fill="var(--spec)"><title>${esc(label(t))}: до спеки ${a}</title></rect>`;
+    s += `<rect x="${x}" y="${y(a + b)}" width="${w}" height="${y(a) - y(a + b)}" fill="var(--impl)"><title>${esc(label(t))}: после ${b}</title></rect>`;
+    s += `<text x="${x + w / 2}" y="${y(a + b) - 4}" text-anchor="middle" font-size="11" fill="var(--muted)">${a + b}</text>`;
+    const [code, color] = VIA[t.implemented_via] || ["?", "var(--faint)"];
+    s += `<text x="${x + w / 2}" y="${H - bottom + 16}" text-anchor="middle" font-size="12" font-weight="700" fill="${color}">${code}</text>`;
+    s += `<text x="${x + w / 2}" y="${H - bottom + 32}" text-anchor="middle" font-size="10.5" fill="var(--faint)">${esc((t.started || t.date || "").slice(5, 10))}</text>`;
+    s += `<text x="${x + w / 2}" y="${H - bottom + 46}" text-anchor="middle" font-size="10.5" fill="var(--faint)">${esc(t.size || "")}</text>`;
+  });
+  if (BASELINE != null) {
+    s += `<line x1="${left}" x2="${W - 10}" y1="${y(BASELINE)}" y2="${y(BASELINE)}" stroke="var(--ok)" stroke-dasharray="5 4"/>`;
+    document.getElementById("baseline-legend").innerHTML = `<i style="background:var(--ok)"></i>до harness: ${BASELINE} на сессию`;
+  }
+  document.getElementById("corr").innerHTML = s + "</svg>";
+}
+
+function costChart() {
+  const W = Math.max(640, TASKS.length * 64 + 60), H = 200, top = 12, bottom = 34, left = 44, h = H - top - bottom;
+  const step = (W - left - 10) / Math.max(1, TASKS.length);
+  const maxA = Math.max(10, ...TASKS.map(t => n(t.active_min))), maxC = Math.max(10, ...TASKS.map(t => n(t.cache_read_m)));
+  let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Время и токены по задачам">`;
+  s += `<line x1="${left}" x2="${W - 10}" y1="${top + h}" y2="${top + h}" stroke="var(--line)"/>`;
+  TASKS.forEach((t, i) => {
+    const x = left + i * step + step * 0.15, w = step * 0.33, a = n(t.active_min), c = n(t.cache_read_m);
+    const ha = a / maxA * h, hc = c / maxC * h;
+    s += `<rect x="${x}" y="${top + h - ha}" width="${w}" height="${ha}" fill="var(--accent)"><title>${esc(label(t))}: ${a} мин</title></rect>`;
+    s += `<rect x="${x + w + 2}" y="${top + h - hc}" width="${w}" height="${hc}" fill="var(--faint)"><title>${esc(label(t))}: ${c} млн</title></rect>`;
+    s += `<text x="${x + w}" y="${top + h - Math.max(ha, hc) - 4}" text-anchor="middle" font-size="10.5" fill="var(--muted)">${Math.round(a)}м · ${Math.round(c)}M</text>`;
+    s += `<text x="${x + w}" y="${H - 12}" text-anchor="middle" font-size="10.5" fill="var(--faint)">${esc((t.started || t.date || "").slice(5, 10))}</text>`;
+  });
+  document.getElementById("cost").innerHTML = s + "</svg>";
+}
+
+function causes() {
+  const c = {};
+  TASKS.forEach(t => (t.causes || []).forEach(k => c[k] = (c[k] || 0) + 1));
+  const rows = Object.entries(c).sort((a, b) => b[1] - a[1]), max = Math.max(1, ...rows.map(r => r[1]));
+  document.getElementById("causes").innerHTML = rows.length ? rows.map(([k, v]) =>
+    `<div class="bar"><span>${esc(CAUSE[k] || k)}</span><div class="t"><div class="f" style="width:${v / max * 100}%"></div></div><span class="v">${v}</span></div>`).join("")
+    : `<p class="muted">Правок не было.</p>`;
+}
+
+function table() {
+  const head = "<tr><th>Дата</th><th>Проект</th><th>Размер</th><th>Тип</th><th>Реализация</th><th>Правки до/после</th><th>Понимание</th><th>Вопросы</th><th>Спека</th><th>Мин</th><th>Кэш, млн</th></tr>";
+  document.getElementById("table").innerHTML = head + TASKS.slice().reverse().map(t => {
+    const [code, color] = VIA[t.implemented_via] || ["?", "var(--faint)"];
+    return `<tr><td class="n">${esc((t.started || t.date || "").replace("T", " "))}</td><td>${esc(t.project)}</td><td>${esc(t.size)}</td><td>${esc(t.type)}</td>
+      <td><span class="pill" style="color:${color}">${code} ${esc(t.implemented_via || "")}</span></td><td class="n">${n(t.corrections_spec)} / ${n(t.corrections_impl)}</td>
+      <td>${esc(t.understanding)}</td><td>${esc(t.questions)}</td><td>${esc(t.spec)}</td><td class="n">${Math.round(n(t.active_min))}</td><td class="n">${n(t.cache_read_m).toFixed(1)}</td></tr>`;
+  }).join("");
+}
+
+kpis(); corrChart(); costChart(); causes(); table();
+</script>

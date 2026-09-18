@@ -70,16 +70,37 @@ snippets, no secrets, no personal data. Sections:
 
 ## 4. Save it
 
-Write the retro to `${CLAUDE_PLUGIN_DATA}/retros/<YYYY-MM-DD>-<project>-<short-slug>.md`, starting with:
+Write the retro to `${CLAUDE_PLUGIN_DATA}/retros/<YYYY-MM-DD>-<project>-<short-slug>.md`, starting with this
+frontmatter. The numbers feed the harness progress page, so fill every field from the facts you collected
+and use only the listed values:
 
 ```
 ---
 status: new
 date: <YYYY-MM-DD>
+started: <YYYY-MM-DDTHH:MM of the first session>
 project: <project folder name>
 sessions: [<session ids>]
+size: <S | M | L | XL>
+type: <bug | feature | ui | refactor | investigation | note | other>
+skills: [<bulevo skills that ran: task, implement, retro>]
+implemented_via: <implement | task | other | none>
+corrections_spec: <user corrections before the spec was approved>
+corrections_impl: <user corrections after that>
+causes: [<for each correction: misunderstood, wrong_approach, overengineering, incomplete, didnt_verify, ui_quality, standards, ignored_instruction, environment, needless_question>]
+understanding: <accurate | partly | missed>
+questions: <useful | none_needed | missing | too_many>
+code_found: <all | some_missed | wrong | unchecked>
+spec: <held | gaps | wrong | skipped>
+active_min: <active minutes across the sessions>
+cache_read_m: <cache-read tokens across all models, millions>
+output_k: <output tokens across all models, thousands>
 ---
 ```
+
+`implemented_via` is `implement` when `/bulevo:implement` ran the implementation, `task` when the change was
+made inside `/bulevo:task`, `other` for anything else (a plain prompt, another command), `none` when no code
+changed.
 
 Tell the user the saved path and give a three-sentence summary. The harness maintainers pick up new retros
 from this folder on this machine.

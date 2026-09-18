@@ -86,6 +86,7 @@ Optional `.claude/bulevo.json` in the project:
 |---|---|
 | `plugins/bulevo/` | The plugin |
 | `docs/requirements.md` | What the harness must make agents do, and why |
+| `tools/retros/` | Collect the metrics from your retros into a progress page |
 | `tools/transcripts/` | Mine all Claude Code transcripts on a machine for where agents needed correcting |
 | `evals/` | Measuring harness changes; currently a spike with Harbor and `claude plugin eval` |
 
