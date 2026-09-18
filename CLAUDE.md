@@ -11,7 +11,8 @@ must make agents do and why.
 - `.claude-plugin/marketplace.json` + `plugins/` — what gets installed into projects. Only this ships to users.
   `plugins/bulevo`: `/bulevo:task` turns a task into an agreed spec in `.claude/tasks/` before code, using
   the read-only `scout` subagent on Sonnet to map existing code. Settings: `.claude/bulevo.json` in the
-  project (`pushback`: `quiet` | `balanced` | `strict`). `/bulevo:retro` saves a plain-text retro of a
+  project (`pushback`: `quiet` | `balanced` | `strict`). `/bulevo:implement` builds an approved spec and
+  re-analyzes any rule change that arrives during or after implementation. `/bulevo:retro` saves a plain-text retro of a
   finished task to the plugin data folder (`~/.claude/plugins/data/bulevo-bulevo-harness/retros/`);
   `/apply-retros` in this repo turns new retros into proposed fixes.
 - Plugin `version` is intentionally unset while iterating, so every pushed commit is an update.

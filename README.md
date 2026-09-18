@@ -50,7 +50,12 @@ Run it at the start of a task, before any code is written. It:
 5. Writes a spec to `.claude/tasks/<date>-<slug>.md` with verifiable acceptance criteria and stops for your
    approval.
 
-Implement from the approved spec in a fresh session, for example: `Implement .claude/tasks/<file>.md`.
+### `/bulevo:implement <spec>`
+
+Builds the approved spec, preferably in a fresh session. It stays within the spec's scope, asks before
+changing any behavior the requirements don't cover, and verifies through the path real users take. Every
+later message is treated as a defect, a new rule or a question: a new rule is re-analyzed and written into
+the spec before any code changes.
 
 Works in a single repository and in a folder that contains several repositories.
 

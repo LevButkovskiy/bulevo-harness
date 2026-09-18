@@ -43,18 +43,21 @@ If the task's headline promises more than its listed items (for example "match t
 bullet points), ask whether to do only the listed items or everything the headline implies, and record the
 answer in Scope.
 
-## 3. Map the code
+## 3. Check the environment first
+
+Before mapping the code, check with read-only commands what the analysis depends on: the current branch,
+how far it is behind the default branch, uncommitted changes, whether the app or test stand responds,
+whether dependencies look stale. If the branch diverges from the default branch or the tree is dirty, tell
+the user in your next message and ask whether to switch or update before the analysis, because analysis on
+the wrong branch has to be redone. Record the state in the spec. The environment and git belong to the
+user: propose actions (merge, stash, start services, install dependencies) and wait for a decision; never do
+them on your own.
+
+## 3a. Map the code
 
 Delegate to the `bulevo:scout` subagent. Give it the task text and anything the user already said about
 where the change lives. Read its report, then open the key files it names yourself before relying on them.
 Treat "doesn't exist" in the report as "not found under those names" until you've checked.
-
-## 3a. Check the environment
-
-With read-only commands, note what will block implementation: how far the branch is behind the default
-branch, uncommitted changes, whether the app or test stand responds, whether dependencies look stale.
-Record it in the spec. The environment and git belong to the user: propose actions (merge, stash, start
-services, install dependencies) and wait for a decision; never do them on your own.
 
 ## 4. Analyze the requirements
 
@@ -64,6 +67,10 @@ Treat the requirements as a draft that may be wrong. Work through:
 - **Contradictions** with current behavior, existing code, data or other requirements.
 - **Edge cases:** roles and permissions, empty and error states, concurrent edits, existing data and
   migrations, mobile and small screens for UI.
+- **Access.** Roles named in a task describe who is affected, not how to check it. Build access rules on
+  the mechanism the project already uses (for example privileges granted to roles) as the scout found it,
+  never on role names from the task text. For anything whose display or saving depends on access, list
+  what a user with different rights sees and saves when they open a record someone else created.
 - **Side effects:** other features, services, reports or integrations the change affects.
 - **A simpler or better approach**, reusing what the scout found first. Follow existing patterns by default;
   propose a fresh approach only as an explicit alternative with reasons.
@@ -132,4 +139,6 @@ What could go wrong, and what was assumed without verification.
 ## 7. Hand off
 
 Show a short summary: the problem, key decisions, number of touch points, and the spec path. Ask the user
-to approve or correct it. Stop there; implementation starts only after approval.
+to approve or correct it. Stop there; implementation starts only after approval, with
+`/bulevo:implement <spec path>`, preferably in a fresh session: a long session re-reads its whole history on
+every turn.
