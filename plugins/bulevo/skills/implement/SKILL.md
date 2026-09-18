@@ -31,15 +31,14 @@ decision. Commit only when the user asks.
 ## 3. Build within the spec
 
 - Change what **Changes** lists, reusing what **Reuse** names. No refactors, renames or cleanups outside it.
-- **Anything beyond the literal request.** If a change would alter behavior the requirements don't ask for,
-  such as a shared function other features call, or the look beyond what was asked, such as reworking a
-  layout or form while fixing its width, stop before making it. Describe it separately: what changes, for
-  whom, and why it seems needed. Wait for an explicit yes; a mention in the spec is not consent. If the user
-  rejects it, remove only that change and keep the rest of the solution.
-- **Text in the UI is short.** Labels, hints and descriptions say only what the user needs to act. Don't
-  restate how the feature works in hints or descriptions.
-- **Applying review findings.** Fix with the smallest change to existing logic. When a fix would add a new
-  entity (a table, a cache key, a method, a module, a flag), don't apply it: list it as a proposal.
+- **Decide nothing the spec didn't decide.** When the work needs a choice the spec doesn't make, stop and
+  ask in one short message with the options and your recommendation, instead of picking a default. That
+  includes behavior or looks beyond the literal request (a shared function other features call, reworking
+  a form while fixing its width), open choices inside the scope (how data is deleted or kept, where values
+  the business changes live, how time zones work, the visual concept before its details), requests that read
+  two ways, and review findings whose fix adds a new entity (a table, a cache key, a module, a flag). A
+  mention in the spec is not consent. If the user rejects a change, remove only that change.
+- **Text in the UI is short.** Labels, hints and descriptions say only what the user needs to act.
 - When the spec turns out wrong or incomplete, say what and propose the spec change before coding around it.
 
 ## 4. Verify through the real path
@@ -68,9 +67,7 @@ Before touching code, classify each new message from the user:
 - **A question** ("why does…", "what happens if…"): answer with facts from code, data or logs. Change
   nothing until the user asks for a change.
 
-When unsure which kind a message is, treat it as a new rule. When a visual request can be read two ways
-("scale it", "make it bigger", "move it up"), ask one short question or show both options before changing
-anything.
+When unsure which kind a message is, treat it as a new rule.
 
 ## 6. Finish
 
