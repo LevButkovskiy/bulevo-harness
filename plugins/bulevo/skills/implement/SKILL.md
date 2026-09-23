@@ -28,6 +28,13 @@ default branch, uncommitted changes, whether the stand responds. Report problems
 The environment and git belong to the user: propose merges, stashes, restarts or installs and wait for a
 decision. Commit only when the user asks.
 
+**Where to build.** When the session folder is a git repository, or holds several with a WorktreeCreate hook
+in its `.claude` settings, ask in your first message whether to build here or in an isolated copy, and
+recommend the copy when other sessions may be working in this folder. For a copy, enter it with the
+EnterWorktree tool, named after the spec file, and keep working there; the spec comes along and is synced
+back when the copy is removed. Tell the user at the end which `worktree-<name>` branches hold the work. A
+multi-repo folder without the hook can't isolate; say so once and build here.
+
 **Commands with side effects.** Before a build, formatter, migration, install or generator, check what it
 touches beyond your change: running processes (a dev server watching the output folder), shared folders,
 files outside the task. If the project's dev server already responds, use it instead of starting another.

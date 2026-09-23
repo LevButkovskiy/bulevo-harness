@@ -16,6 +16,12 @@ must make agents do and why.
   screens to the `ui-reviewer` subagent (fresh context, no write tools, uses the session's browser tools). `/bulevo:retro` saves a plain-text retro of a
   finished task to the plugin data folder (`~/.claude/plugins/data/bulevo-bulevo-harness/retros/`);
   `/apply-retros` in this repo turns new retros into proposed fixes.
+- `/bulevo:parallel-setup` installs `plugins/bulevo/scripts/worktree.py` as a WorktreeCreate/WorktreeRemove
+  hook in a multi-repo workspace's `.claude/settings.local.json` (never in the plugin's hooks: it would
+  replace git worktrees in every project). `/bulevo:task` offers it once per workspace; `/bulevo:implement`
+  asks whether to build in an isolated copy and enters it with EnterWorktree. Verified: `claude --worktree`,
+  EnterWorktree mid-session, two parallel sessions, spec sync-back. A hook added mid-session only applies
+  from the next session.
 - Plugin `version` is intentionally unset while iterating, so every pushed commit is an update.
 - `plugins/bulevo/scripts/transcripts.py` — transcript extraction, shared by the plugin and the tools below:
   bulk mode for a whole machine, focused mode (`--session`, `--mentions`) for one task.

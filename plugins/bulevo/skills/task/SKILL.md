@@ -61,6 +61,12 @@ the wrong branch has to be redone. Record the state in the spec. The environment
 user: propose actions (merge, stash, start services, install dependencies) and wait for a decision; never do
 them on your own.
 
+If the session folder is not a git repository but holds several, its `.claude` settings have no
+WorktreeCreate hook, and `.claude/bulevo.json` doesn't say `"parallel": false`, offer once to enable
+isolated parallel sessions: without the hook, parallel sessions in this folder edit the same files. On a
+yes, follow `${CLAUDE_PLUGIN_ROOT}/skills/parallel-setup/SKILL.md`; the hook takes effect from the next
+session, where `/bulevo:implement` runs. On a no, record `"parallel": false` in `.claude/bulevo.json`.
+
 ## 3a. Map the code
 
 Delegate to the `bulevo:scout` subagent. Give it the task text and anything the user already said about

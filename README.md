@@ -66,6 +66,14 @@ plain-text retro — what went well, where you corrected the agent, and which ha
 prevented it — to `~/.claude/plugins/data/bulevo-bulevo-harness/retros/`. Maintainers run `/apply-retros`
 in this repository on the same machine to turn retros into fixes.
 
+### `/bulevo:parallel-setup`
+
+For a folder that holds several git repositories, where Claude Code's own worktrees don't work. It installs
+a hook that gives each parallel session its own copy of the workspace: a git worktree of every repository
+on branch `worktree-<name>`, plus the workspace's top-level files. `/bulevo:task` offers it once per
+workspace; afterwards `/bulevo:implement` asks whether to build in an isolated copy and moves there itself.
+Rerun it after a plugin update.
+
 ### Settings
 
 Optional `.claude/bulevo.json` in the project:
