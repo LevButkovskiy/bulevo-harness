@@ -34,21 +34,17 @@ python3 tools/transcripts/batch.py --data <out> --batches <N>
 
 ## 3. Label in parallel
 
-Launch one subagent per batch in a single message, each with `model: "sonnet"`, running in the background.
-Give each this prompt, with the batch number and output directory filled in:
+Run the `label-batches` workflow in this repository, passing the output directory and the number of
+`batch-*.txt` files `batch.py` actually created (it makes fewer than asked when there are few sessions):
 
-> Label Claude Code session digests. Repo root: the current directory.
-> 1. Read the rules: tools/transcripts/LABELING.md — follow them exactly.
-> 2. Session ids to label (one per line): <out>/batches/batch-<i>.txt
-> 3. For each id read <out>/digests/<id>.md in full (use Read with offset/limit for large files; don't skip
->    parts — corrections often appear late).
-> 4. Write exactly one JSON line per session to <out>/labels/batch-<i>.jsonl (valid JSON per line, UTF-8,
->    same key order as the rules). Write incrementally so progress isn't lost.
-> 5. Do not read raw transcripts under ~/.claude and do not modify anything else.
-> When done, check every line parses as JSON and the line count equals the id count. Reply with only: count
-> labeled, and 2–3 notable patterns across the batch (short, in the language the user writes in).
+```
+Workflow: name "label-batches", args { "out": "<out>", "batches": <N> }
+```
 
-Wait for every batch. If one comes back short, send that agent a follow-up to finish the missing ids.
+It runs one Sonnet agent per batch against `LABELING.md`, and re-runs any batch that wrote fewer labels
+than it had ids, up to twice. Digests stay inside the agents: only counts and a few patterns per batch come
+back. Watch it with `/workflows`. If the run reports a batch as still short or lost, finish that batch
+yourself before the report.
 
 ## 4. Report
 

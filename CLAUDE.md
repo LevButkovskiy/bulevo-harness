@@ -31,7 +31,8 @@ must make agents do and why.
   `progress_page.html`; `/progress` rebuilds and republishes the page.
 - `evals/` — measurement. `evals/spike/` is a throwaway spike: a probe plugin and a Harbor agent subclass.
 - `.claude/skills/` — runbooks for maintaining this repo (`/apply-retros`, `/progress`, `/label-sessions`, `/eval-spike`),
-  not part of any plugin.
+  not part of any plugin. `.claude/workflows/` — dynamic workflows those runbooks launch: `label-batches` fans
+  labeling out over batches and finishes the short ones, so the digests never reach the main session's context.
 - `.data/` — mined transcripts, labels and run results. Gitignored because it holds source code and private
   data from the machine it ran on. Never commit it or paste its contents elsewhere.
 
