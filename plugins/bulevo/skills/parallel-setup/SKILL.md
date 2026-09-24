@@ -43,9 +43,10 @@ Write it only after the user agrees. Merge it into the existing file and keep ev
 
 ## 4. Explain how to use it
 
-- The hook takes effect from the next session. From then on `/bulevo:implement` offers to build in an
-  isolated copy and enters it itself; `claude --worktree <name>` from the workspace folder works too. A copy
-  lives in `<parent>/.<workspace>-worktrees/<name>/`: a git worktree of every repository on branch
+- The hook takes effect from the next session. A copy is for working on two tasks at once: ask
+  `/bulevo:implement` for one, or run `claude --worktree <name>` from the workspace folder. A single task
+  stays in the workspace, because the copy is where the code then sits and the user reads it. A copy lives
+  in `<parent>/.<workspace>-worktrees/<name>/`: a git worktree of every repository on branch
   `worktree-<name>`, plus copies of the workspace's top-level files and `.claude` folder. Specs changed in
   the copy are synced back when it is removed.
 - The branch starts from each repository's default branch. Set `BULEVO_WORKTREE_BASE=head` to start from the

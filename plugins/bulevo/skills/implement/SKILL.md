@@ -28,12 +28,14 @@ default branch, uncommitted changes, whether the stand responds. Report problems
 The environment and git belong to the user: propose merges, stashes, restarts or installs and wait for a
 decision. Commit only when the user asks.
 
-**Where to build.** When the session folder is a git repository, or holds several with a WorktreeCreate hook
-in its `.claude` settings, ask in your first message whether to build here or in an isolated copy, and
-recommend the copy when other sessions may be working in this folder. For a copy, enter it with the
-EnterWorktree tool, named after the spec file, and keep working there; the spec comes along and is synced
-back when the copy is removed. Tell the user at the end which `worktree-<name>` branches hold the work. A
-multi-repo folder without the hook can't isolate; say so once and build here.
+**Where to build.** Build in this folder. It is where the user reads the code afterwards, and an isolated
+copy costs them that. A copy is for running tasks at the same time: when the folder supports one (a git
+repository, or several with a WorktreeCreate hook in its `.claude` settings), say so in one clause of your
+first message, and move there only if the user asks or says another task is running here. Then enter it
+with the EnterWorktree tool, named after the spec file, and keep working there; the spec comes along and is
+synced back when the copy is removed. At the end give the copy's absolute path first and the
+`worktree-<name>` branches second, so the user can open the code where it is instead of asking for it to be
+moved. A multi-repo folder without the hook can't isolate; don't raise it.
 
 **Commands with side effects.** Before a build, formatter, migration, install or generator, check what it
 touches beyond your change: running processes (a dev server watching the output folder), shared folders,

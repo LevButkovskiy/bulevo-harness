@@ -18,8 +18,10 @@ must make agents do and why.
   `/apply-retros` in this repo turns new retros into proposed fixes.
 - `/bulevo:parallel-setup` installs `plugins/bulevo/scripts/worktree.py` as a WorktreeCreate/WorktreeRemove
   hook in a multi-repo workspace's `.claude/settings.local.json` (never in the plugin's hooks: it would
-  replace git worktrees in every project). `/bulevo:task` offers it once per workspace; `/bulevo:implement`
-  asks whether to build in an isolated copy and enters it with EnterWorktree. Verified: `claude --worktree`,
+  replace git worktrees in every project). `/bulevo:task` offers the setup once per workspace, because the
+  hook only applies from the next session. A copy is opt-in, for two tasks at once: `/bulevo:implement`
+  builds in the workspace unless asked otherwise, since that is where the user reads the code afterwards.
+  Verified: `claude --worktree`,
   EnterWorktree mid-session, two parallel sessions, spec sync-back. A hook added mid-session only applies
   from the next session.
 - Plugin `version` is intentionally unset while iterating, so every pushed commit is an update.
