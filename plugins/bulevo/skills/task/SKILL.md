@@ -101,8 +101,12 @@ Treat the requirements as a draft that may be wrong. Work through:
   for the spec, not a risk. Derive sizes from the real container, including padding and icons inside
   controls, instead of copying percentages.
 
-Facts before hypotheses: when a conclusion depends on how the system behaves, check the code or data. Label
-anything you could not verify as an assumption.
+**Facts before hypotheses.** Reading the code tells you what it should do, not what it does. Before a
+decision in the spec rests on a statement about current behavior, reproduce that behavior through the app,
+the data or the logs, and reproduce it in the lifecycle a real user hits — a reload, a saved filter or
+preset, restored state — not only the first render. A claim you could not reproduce doesn't become a marked
+assumption and ship anyway: either say what you need in order to check it and stop, or rewrite the decision
+so it no longer depends on the claim. Everything else you inferred is still labeled as an assumption.
 
 ## 5. Ask and push back
 
