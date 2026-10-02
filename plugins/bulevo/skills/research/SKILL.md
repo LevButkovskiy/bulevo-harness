@@ -43,11 +43,12 @@ does today. For a technical choice, the size and boundaries of the modules, how 
 what would change, which tests exist, and what would move easily or hard. The options are compared with
 what exists. Don't design the code.
 
-## 4. Ask only about the goal
+## 4. Ask only about the goal and the plans
 
-If what you read doesn't answer the goal, the audience or the constraints, ask about those in one short
-round. Don't assume a goal: the options and the recommendation depend on it, so a missing goal is the
-first thing to ask about. Use the AskUserQuestion tool: at most 4 questions, 2–4 options each, recommended
+Facts about today (who maintains the code, the stack, the audience) may come from the code, the docs and
+the memory. The goal and the plans that decide between options (team growth, load, deadlines) come only
+from the user: if the user hasn't stated them, ask in one short round before researching. Don't infer them
+from facts about today. Use the AskUserQuestion tool: at most 4 questions, 2–4 options each, recommended
 option first. If that tool isn't available, ask in plain text and stop. Ask nothing that the research
 itself should answer, and nothing about implementation.
 
@@ -62,7 +63,8 @@ use web search and fetch. Read their reports; open a source yourself before a re
 
 Build 2–4 options from the material. One of them is always the simplest option that works; for a change to
 something that exists, that may be keeping it and fixing what hurts. Compare them by the criteria from
-step 2. Recommend one, with reasons and source links. If sources were thin, say so instead of padding.
+step 2, and decide which one you would recommend, with reasons and source links; it is shown only in step
+9. If sources were thin, say so instead of padding.
 
 ## 7. Write the report
 
@@ -85,29 +87,45 @@ Comparable products, or teams that made the same choice, and what came of it, ea
 Practices, guidelines and pitfalls, each with a source.
 
 ## Options
-A table: one row per option, one column per criterion. Then a short description of each option.
-
-## Recommendation
-The option, the reasons, and what would change the choice.
+Every option compared by the same criteria, in whatever form reads best. Then a short description of each
+option.
 
 ## Sources
 Every URL used.
 ```
 
-No screenshots: links and descriptions only.
+No screenshots: links and descriptions only. The recommendation is added in step 9.
 
-## 8. Publish and ask for the choice
+## 8. Publish and compare
 
-The user can only choose after seeing what the options mean, so do these in order:
+The user first needs to understand how the options differ, and decides only after that.
 
-1. If the session has the Artifact tool, publish the same report as a private Artifact page by that tool's
-   own rules. Without it, give the file path.
-2. In a message, explain each option in plain words: what the user gets, what it costs, and when it is the
-   right choice. Then the recommendation and why, the report path and the page link.
-3. End that message by asking which option to take, recommended option first, in plain text, not with
-   AskUserQuestion: its short labels hide the difference between the options. Stop there.
+1. If the session has the Artifact tool, publish the report as a private Artifact page by that tool's own
+   rules. Without it, give the file path.
+2. Show the comparison in whatever form makes the difference clearest: the Artifact page, a table, a
+   diagram. Cover the same points for every option, in plain words: what we do, how long it takes, what
+   can break, what the code and the work look like after, and what it opens or closes later. Say which
+   factors favor which option ("if the team grows, C").
+3. In the message, give the report path and the page link, and invite questions.
 
-## 9. Record the choice
+This message has no recommendation and no question about the choice. Stop there and answer questions
+from the report and its sources.
+
+## 9. Recommend and ask for the choice
+
+When the user says they understand the options or asks which to take, add to the report, before
+Sources:
+
+```markdown
+## Recommendation
+The option, the reasons, each assumption it rests on on its own line, and what would change the choice.
+```
+
+Republish the Artifact if there is one, and give the recommendation in the message. Ask which option to
+take, recommended option first, in plain text, not with AskUserQuestion: its short labels hide the
+difference between the options. Stop there.
+
+## 10. Record the choice
 
 When the user picks an option, add to the report:
 
