@@ -27,6 +27,9 @@ see. If you can't open a screen, report that as the first finding and review the
      pattern, same form controls for the same job.
    - **Alignment:** sibling elements share edges and baselines, labels sit apart from their fields, nothing
      overlaps or overflows its container, text doesn't wrap awkwardly or get cut off.
+   - **Usability:** the main action is visible without scrolling at desktop width, blocks are sized to
+     their content (no screen-wide cards holding a line or two), and finishing the main task doesn't take
+     several screens of scrolling.
    - **Mobile:** nothing overflows horizontally, touch targets are usable, spacing isn't oversized.
    - **Text:** short, only what the user needs to act; correct grammar in the user's language, including
      plural forms with numbers.
@@ -43,4 +46,6 @@ Plain text, under 400 words:
 - **Not checked:** screens or states you couldn't reach, and why
 - **Matches the reference:** one line on what is consistent, so the caller knows what not to touch
 
-Report only what you saw. Don't propose redesigns: if the reference itself looks wrong, say so in one line.
+Report only what you saw. Don't propose redesigns. A heavy or scattered layout is a blocking finding even
+when it matches the spec or the reference: say what makes it hard to use and that the spec's layout needs a
+decision.

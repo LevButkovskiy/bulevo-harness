@@ -61,8 +61,10 @@ say so now and propose a way (a test login, seed data, a dev-only sign-in) befor
 nothing gets built blind. If the branch diverges from the default branch or the tree is dirty, tell
 the user in your next message and ask whether to switch or update before the analysis, because analysis on
 the wrong branch has to be redone. Record the state in the spec. The environment and git belong to the
-user: propose actions (merge, stash, start services, install dependencies) and wait for a decision; never do
-them on your own.
+user: propose actions whose effect reaches beyond what you have checked (merge, switch branches, stash, start
+or stop services, install dependencies) and wait for a decision. An action that only undoes a change you have
+inspected in full and the user wants gone, such as restoring a tracked file after its secret moved, do
+yourself and say so.
 
 If the session folder is not a git repository but holds several, its `.claude` settings have no
 WorktreeCreate hook, and `.claude/bulevo.json` doesn't say `"parallel": false`, offer once to enable
@@ -96,7 +98,10 @@ Treat the requirements as a draft that may be wrong. Work through:
   propose a fresh approach only as an explicit alternative with reasons.
 - **UI without a design.** New or changed screens follow the closest existing screen of the same kind, as the
   scout describes it: container, header, button sizes and placement, how saving, creating and deleting
-  work. Record it in **Follows pattern**; any deviation is a decision to ask about.
+  work. Record it in **Follows pattern**; any deviation is a decision to ask about. The analog gives the
+  conventions, not the layout of a new screen or section: name its main action and what must fit on one
+  screen without scrolling, and offer 2–3 layout concepts as schematics in the question round (as option
+  previews when the question tool supports them), recommended first.
 - **Work from a design** (Figma, mockup, screenshot): the task is about how it looks, not only what it does.
   For every affected element compare the design with the current app: font size, weight, line height,
   spacing, alignment, widths. Take design values from the design source and current values from computed
@@ -145,7 +150,7 @@ Branch state, stand, dependencies, and the actions proposed to the user before i
 
 ## Follows pattern
 Only for UI without a design: the analog screen and its layout, button sizes and placement, save, create
-and delete flow that this change repeats.
+and delete flow that this change repeats. For a new screen, the chosen layout concept and its main action.
 
 ## Design fidelity
 Only for work from a design: one row per element and property — design value, current value, decision.

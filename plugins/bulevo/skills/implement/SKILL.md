@@ -25,8 +25,10 @@ touches and the code under **Reuse** and **Changes** before editing.
 
 Check with read-only commands: current branch against the one the spec was written on, how far behind the
 default branch, uncommitted changes, whether the stand responds. Report problems in your first message.
-The environment and git belong to the user: propose merges, stashes, restarts or installs and wait for a
-decision. Commit only when the user asks.
+The environment and git belong to the user: propose actions whose effect reaches beyond what you have
+checked (merges, branch switches, stashes, restarts, installs) and wait for a decision. An action that only
+undoes a change you have inspected in full and the user wants gone, do yourself and say so. Commit only when
+the user asks.
 
 **Where to build.** Build in this folder. It is where the user reads the code afterwards, and an isolated
 copy costs them that. A copy is for running tasks at the same time: when the folder supports one (a git
