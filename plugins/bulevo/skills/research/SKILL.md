@@ -46,9 +46,10 @@ what exists. Don't design the code.
 ## 4. Ask only about the goal
 
 If what you read doesn't answer the goal, the audience or the constraints, ask about those in one short
-round. Use the AskUserQuestion tool: at most 4 questions, 2–4 options each, recommended option first. If
-that tool isn't available, ask in plain text and stop. Ask nothing that the research itself should answer,
-and nothing about implementation.
+round. Don't assume a goal: the options and the recommendation depend on it, so a missing goal is the
+first thing to ask about. Use the AskUserQuestion tool: at most 4 questions, 2–4 options each, recommended
+option first. If that tool isn't available, ask in plain text and stop. Ask nothing that the research
+itself should answer, and nothing about implementation.
 
 ## 5. Gather material
 
@@ -97,11 +98,14 @@ No screenshots: links and descriptions only.
 
 ## 8. Publish and ask for the choice
 
-If the session has the Artifact tool, publish the same report as a private Artifact page by that tool's own
-rules. Without it, give the file path.
+The user can only choose after seeing what the options mean, so do these in order:
 
-Show a short summary: the options, the recommendation and the report path (and the page link). Ask which
-option to take; recommended option first. Stop there.
+1. If the session has the Artifact tool, publish the same report as a private Artifact page by that tool's
+   own rules. Without it, give the file path.
+2. In a message, explain each option in plain words: what the user gets, what it costs, and when it is the
+   right choice. Then the recommendation and why, the report path and the page link.
+3. End that message by asking which option to take, recommended option first, in plain text, not with
+   AskUserQuestion: its short labels hide the difference between the options. Stop there.
 
 ## 9. Record the choice
 
