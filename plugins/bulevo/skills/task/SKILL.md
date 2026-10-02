@@ -34,6 +34,9 @@ default is `balanced`.
 - **Change**: continue below.
 - **Unclear**: ask one question — investigate or change — and stop until answered.
 
+If the task is a `/bulevo:research` report from `.claude/research/`, the option in its Choice section is an
+agreed decision: copy it into **Decisions** and don't reopen it unless the code contradicts it.
+
 If the request only records something (a note, a backlog or todo entry, a doc) and changes no application
 code, do it now without asking: skip the scout, the environment check, the spec and approval. For choices
 that are easy to change later, such as the file name or where it goes, follow existing files and name your

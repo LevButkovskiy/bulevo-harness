@@ -9,9 +9,12 @@ must make agents do and why.
 ## Layout
 
 - `.claude-plugin/marketplace.json` + `plugins/` — what gets installed into projects. Only this ships to users.
-  `plugins/bulevo`: `/bulevo:task` turns a task into an agreed spec in `.claude/tasks/` before code, using
-  the read-only `scout` subagent on Sonnet to map existing code. Settings: `.claude/bulevo.json` in the
-  project (`pushback`: `quiet` | `balanced` | `strict`). `/bulevo:implement` builds an approved spec and
+  `plugins/bulevo`: `/bulevo:research` compares 2–4 ways to solve a product or technical problem before the
+  spec, from the web findings of 2–3 parallel `researcher` subagents on Sonnet (no write tools); the report
+  goes to `.claude/research/` (not `tasks/`, so `/bulevo:implement` never takes it for a spec) and, when the
+  session has the Artifact tool, to a private page. The chosen option is the input of `/bulevo:task`.
+  `/bulevo:task` turns a task into an agreed spec in `.claude/tasks/` before code, using the read-only
+  `scout` subagent on Sonnet to map existing code. Settings: `.claude/bulevo.json` in the project (`pushback`: `quiet` | `balanced` | `strict`). `/bulevo:implement` builds an approved spec and
   re-analyzes any rule change that arrives during or after implementation; for UI it hands the changed
   screens to the `ui-reviewer` subagent (fresh context, no write tools, uses the session's browser tools). `/bulevo:retro` saves a plain-text retro of a
   finished task to the plugin data folder (`~/.claude/plugins/data/bulevo-bulevo-harness/retros/`);

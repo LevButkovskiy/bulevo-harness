@@ -37,6 +37,17 @@ Claude Code then refreshes the marketplace after startup and updates the plugin 
 
 ## Use
 
+### `/bulevo:research <topic>`
+
+Run it when you know the problem but not the best way to solve it: a product feature or a technical choice
+such as a rewrite or a new library. It studies comparable products or teams that made the same choice,
+guidelines and best practices with web researcher subagents on a cheaper model, compares 2–4 options by
+criteria that fit the question (for a feature, value and UX; for a rewrite, amount of work, regression risk
+and a gradual path; always cost, risks and fit with your stack), and recommends one. The report goes to
+`.claude/research/<date>-<slug>.md` and, in clients with Artifacts, to a private page. It asks nothing about
+implementation and writes no code. After you pick an option, run `/bulevo:task <report>` to turn it into a
+spec.
+
 ### `/bulevo:task <task>`
 
 Run it at the start of a task, before any code is written. It:
